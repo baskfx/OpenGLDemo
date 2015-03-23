@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <demo.game.opengl.GLSurfaceView
+        <demo.game.opengl.MyGLSurfaceView
             android:id="@+id/glSurfaceView"
             android:layout_width="match_parent"
             android:layout_height="200dp" />

@@ -18,6 +18,7 @@ package demo.game.opengl;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 
@@ -31,23 +32,35 @@ public class OpenGLTestActivity extends Activity {
     private final static int BACKGROUND_WIDTH = 512;
     private final static int BACKGROUND_HEIGHT = 512;
     
-    private GLSurfaceView mGLSurfaceView;
+    private MyGLSurfaceView mGLSurfaceView;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        boolean surfaceViewIsLayout = true; 
+        Scene1();
+        
+        //Scene2();
+    }
+    
+    private void Scene2(){
+    	GLSurfaceView view = new GLSurfaceView(this);
+        view.setRenderer(new OpenGLRenderer());
+        setContentView(view);
+    }
+    
+    private void Scene1(){
+    	boolean surfaceViewIsLayout = true; 
 
         if(surfaceViewIsLayout)
         {
             setContentView(R.layout.gl_test_layout);
-            mGLSurfaceView = (GLSurfaceView) findViewById(R.id.glSurfaceView);
+            mGLSurfaceView = (MyGLSurfaceView) findViewById(R.id.glSurfaceView);
         }
         else
         {
         	setContentView(R.layout.main);
-        	mGLSurfaceView = new GLSurfaceView(this);
+        	mGLSurfaceView = new MyGLSurfaceView(this);
         }
         
         

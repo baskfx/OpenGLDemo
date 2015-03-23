@@ -36,7 +36,7 @@ import android.util.Log;
  * frame.  It also manages loading of textures and (when VBOs are used) the
  * allocation of vertex buffer objects.
  */
-public class SimpleGLRenderer implements GLSurfaceView.Renderer {
+public class SimpleGLRenderer implements MyGLSurfaceView.Renderer {
     // Specifies the format our textures should be converted to upon load.
     private static BitmapFactory.Options sBitmapOptions
         = new BitmapFactory.Options();
