@@ -21,6 +21,8 @@ import android.content.Intent;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 /**
  * Activity for testing OpenGL ES drawing speed.  This activity sets up sprites 
@@ -33,14 +35,35 @@ public class OpenGLTestActivity extends Activity {
     private final static int BACKGROUND_HEIGHT = 512;
     
     private MyGLSurfaceView mGLSurfaceView;
+    private GLSurfaceView glSurfaceView;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        Scene1();
+        //Scene1();
         
         //Scene2();
+        
+        SceneShaders();
+    }
+    
+    private void SceneShaders(){
+    	// Fullscreen mode
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+ 
+        // We create our Surfaceview for our OpenGL here.
+        glSurfaceView = new GLSurf(this);
+ 
+        // Set our view.
+        setContentView(R.layout.activity_main);
+ 
+        // Retrieve our Relative layout from our main layout we just set to our view.
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.gamelayout);
+ 
+        // Attach our surfaceview to our relative layout from our main layout.
+        RelativeLayout.LayoutParams glParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        layout.addView(glSurfaceView, glParams);
     }
     
     private void Scene2(){
