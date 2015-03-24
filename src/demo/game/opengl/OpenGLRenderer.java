@@ -30,13 +30,17 @@ class OpenGLRenderer implements Renderer {
         gl.glLoadIdentity();
         
         gl.glTranslatef(0.0f, 0.0f, -10.0f);
-        gl.glRotatef(mCubeRotation, 1.0f, 1.0f, 1.0f);
+        
+        //gl.glRotatef(mCubeRotation, 1.0f, 1.01f, 1.0f);
+        gl.glRotatef(App.Instance().Alpha * 10.0f, 0.0f, 1.0f, 0.0f);
+        gl.glRotatef(App.Instance().Beta * 10.0f, 1.0f, 0.0f, 0.0f);
+        gl.glScalef(App.Instance().Gamma * .1f, App.Instance().Gamma * .1f, App.Instance().Gamma * .1f);
             
         mCube.draw(gl);
            
         gl.glLoadIdentity();                                    
             
-        mCubeRotation -= 0.15f; 
+        mCubeRotation -= 0.95f; 
     }
 
     @Override

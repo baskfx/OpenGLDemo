@@ -10,8 +10,11 @@
     tools:context="demo.game.opengl.MainActivity" >
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/tvValues"
+        android:gravity="center"
+        android:text="0.0; 0.0; 0.0"
         />
 
 </RelativeLayout>

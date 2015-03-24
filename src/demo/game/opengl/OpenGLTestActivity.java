@@ -16,11 +16,18 @@
 
 package demo.game.opengl;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
@@ -28,7 +35,7 @@ import android.widget.RelativeLayout;
  * Activity for testing OpenGL ES drawing speed.  This activity sets up sprites 
  * and passes them off to an OpenGLSurfaceView for rendering and movement.
  */
-public class OpenGLTestActivity extends Activity {
+public class OpenGLTestActivity extends Activity implements SensorEventListener {
     private final static int SPRITE_WIDTH = 64;
     private final static int SPRITE_HEIGHT = 64;
     private final static int BACKGROUND_WIDTH = 512;
@@ -36,18 +43,48 @@ public class OpenGLTestActivity extends Activity {
     
     private MyGLSurfaceView mGLSurfaceView;
     private GLSurfaceView glSurfaceView;
+
+    SensorManager mSensorManager;
+	Sensor mAccelerometerSensor; 
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        //Scene1();
+     // Инициализируем акселерометр
+     		mSensorManager = (SensorManager) getSystemService(Activity.SENSOR_SERVICE);
+     		List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
+     		if (sensors.size() > 0) {
+     			for (Sensor sensor : sensors) {
+     				if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+     					if (mAccelerometerSensor == null)
+     						mAccelerometerSensor = sensor;
+     				}
+     			}
+     		} 
         
-        //Scene2();
+        //SceneSprites();
         
-        SceneShaders();
+        SceneCube();
+        
+        //SceneShaders();
     }
     
+ // Запуск активити
+ 	@Override
+ 	public void onStart() {
+ 		super.onStart();
+ 		mSensorManager.registerListener(this, mAccelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
+ 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+ 	}
+
+ 	// Обрабатываем остановку активити
+ 	@Override
+ 	public void onStop() {
+ 		super.onStop();
+ 		mSensorManager.unregisterListener(this);
+ 	}
+
     private void SceneShaders(){
     	// Fullscreen mode
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -61,18 +98,21 @@ public class OpenGLTestActivity extends Activity {
         // Retrieve our Relative layout from our main layout we just set to our view.
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.gamelayout);
  
+        //glSurfaceView.setEGLConfigChooser(new MultisampleConfigChooser());
+
         // Attach our surfaceview to our relative layout from our main layout.
         RelativeLayout.LayoutParams glParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         layout.addView(glSurfaceView, glParams);
     }
     
-    private void Scene2(){
+    private void SceneCube(){
     	GLSurfaceView view = new GLSurfaceView(this);
-        view.setRenderer(new OpenGLRenderer());
+    	OpenGLRenderer openGLrenderer = new OpenGLRenderer();
+        view.setRenderer(openGLrenderer);
         setContentView(view);
     }
     
-    private void Scene1(){
+    private void SceneSprites(){
     	boolean surfaceViewIsLayout = true; 
 
         if(surfaceViewIsLayout)
@@ -191,4 +231,22 @@ public class OpenGLTestActivity extends Activity {
         if(!surfaceViewIsLayout)
         	setContentView(mGLSurfaceView);
     }
+
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+		// TODO Auto-generated method stub
+		float sx = event.values[0];
+		float sy = event.values[1]; 
+		float sz = event.values[2]; 
+		
+		App.Instance().Alpha = sx;
+		App.Instance().Beta = sx;
+		App.Instance().Gamma = sz;
+	}
+
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		// TODO Auto-generated method stub
+		
+	}
 }
